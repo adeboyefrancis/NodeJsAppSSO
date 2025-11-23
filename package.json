@@ -1,0 +1,18 @@
+{
+  "name": "nodejsappsso",
+  "version": "1.0.0",
+  "description": "Node.js app with Azure AD SSO",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@azure/msal-node": "^2.5.0",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2"
+  }
+}
