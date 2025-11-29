@@ -1,9 +1,17 @@
 require("dotenv").config();
 const express = require("express");
+const https = require("https");
+const fs = require("fs");
 const msal = require("@azure/msal-node");
  
 const app = express();
 app.set("view engine", "ejs");
+ 
+// Load SSL Certificate
+const options = {
+  key: fs.readFileSync("./certs/key.pem"),
+  cert: fs.readFileSync("./certs/cert.pem")
+};
  
 // MSAL Config
 const msalConfig = {
@@ -24,7 +32,7 @@ app.get("/", (req, res) => {
 app.get("/login", async (req, res) => {
   const authUrlParams = {
     scopes: ["openid", "profile", "email"],
-    redirectUri: "http://localhost:3000/redirect",
+    redirectUri: `https://${process.env.PUBLIC_IP}/redirect`,
   };
  
   const authUrl = await cca.getAuthCodeUrl(authUrlParams);
@@ -35,7 +43,7 @@ app.get("/redirect", async (req, res) => {
   const tokenRequest = {
     code: req.query.code,
     scopes: ["openid", "profile", "email"],
-    redirectUri: "http://localhost:3000/redirect",
+    redirectUri: `https://${process.env.PUBLIC_IP}/redirect`,
   };
  
   try {
@@ -47,7 +55,7 @@ app.get("/redirect", async (req, res) => {
   }
 });
  
-// Start server
-app.listen(process.env.PORT, () =>
-  console.log(`Server running on port ${process.env.PORT}`)
-);
+// Start HTTPS server on port 443
+https.createServer(options, app).listen(443, () => {
+  console.log("HTTPS Server running on port 443");
+});

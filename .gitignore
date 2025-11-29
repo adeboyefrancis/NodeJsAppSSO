@@ -21,3 +21,7 @@ Thumbs.db
 *.swp
 .idea/ # Common for JetBrains IDEs like WebStorm
 .vscode/ # Common for VS Code settings
+
+# Certificates
+/certs/
+.pem
